@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui;
+using MauiPopupTest.Services;
 using MauiPopupTest.ViewModels;
 using Microsoft.Extensions.Logging;
 
@@ -11,7 +12,10 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
-            .UseMauiCommunityToolkit()
+            .UseMauiCommunityToolkit(options =>
+            {
+                options.SetShouldEnableSnackbarOnWindows(true);
+            })
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -19,6 +23,9 @@ public static class MauiProgram
             });
 
         builder.Services.AddTransientWithShellRoute<MainPage, MainViewModel>(nameof(MainPage));
+        builder.Services.AddTransient<IAlertService, AlertService>();
+        //builder.Services.AddTransient<MainPage, MainViewModel>();
+        builder.Services.AddTransientWithShellRoute<TestModalPage, TestModalPageViewModel>(nameof(TestModalPage));
         builder.Services.AddTransientPopup<ActionPopup, ActionPopupViewModel>();
 
 #if DEBUG
